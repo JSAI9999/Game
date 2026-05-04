@@ -6,12 +6,12 @@ pipeline {
     }
 
     environment {
-        DOCKER_USER = "devopsawspratice"
+        DOCKER_USER = "jsaikumar9999"
         IMAGE_NAME = "sliding-block-puzzle-game"
         IMAGE_TAG = "${BUILD_NUMBER}"   // dynamic tagging (better than v1)
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
-        NEXUS_URL = "http://54.85.118.103:8081/repository/game/"
-        RECIPIENTS = "sharan0434@gmail.com"
+        NEXUS_URL = "http://15.152.115.216:8081/repository/game/"
+        RECIPIENTS = "jsaikumar99@gmail.com"
     }
 
     stages {
@@ -73,7 +73,7 @@ stage('SonarQube Analysis') {
         stage('Upload to Nexus') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'nexus',
+                    credentialsId: 'nexuscred',
                     usernameVariable: 'NEXUS_USER',
                     passwordVariable: 'NEXUS_PASS'
                 )]) {
@@ -100,7 +100,7 @@ stage('SonarQube Analysis') {
         stage('Push to DockerHub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker',
+                    credentialsId: 'dockercred',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
@@ -117,7 +117,7 @@ stage('SonarQube Analysis') {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                aws eks update-kubeconfig --region us-east-1 --name saran
+                aws eks update-kubeconfig --region us-east-1 --name sai
 
                 kubectl apply -f deployment.yml
                 kubectl apply -f service.yml
